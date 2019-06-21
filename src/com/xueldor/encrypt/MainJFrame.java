@@ -6,17 +6,25 @@
 
 package com.xueldor.encrypt;
 
+import com.xueldor.encrypt.utils.Base64;
 import com.xueldor.encrypt.utils.DigestUtil;
+import com.xueldor.encrypt.utils.HexUtil;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author xuexiangyu
  */
 public class MainJFrame extends javax.swing.JFrame {
+    
+    private final static String[] ENCODINGS = { "UTF-8", "ISO-8859-1", "GBK", "UTF-16" };
 
     /**
      * Creates new form MainJFrame
@@ -113,6 +121,13 @@ public class MainJFrame extends javax.swing.JFrame {
         jnextButton1 = new javax.swing.JButton();
         jCrc32CheckBox1 = new javax.swing.JCheckBox();
         jRenameButton1 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea3 = new javax.swing.JTextArea();
+        jComboBox1 = new javax.swing.JComboBox();
+        jComboBox2 = new javax.swing.JComboBox();
+        jEncodeTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -146,6 +161,37 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
 
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jScrollPane2.setViewportView(jTextArea2);
+
+        jTextArea3.setEditable(false);
+        jTextArea3.setColumns(20);
+        jTextArea3.setRows(5);
+        jTextArea3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextArea3MouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jTextArea3);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "明文到Base64", "Base64到明文", "文本转16进制", "16进制转文本" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(ENCODINGS));
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox2ActionPerformed(evt);
+            }
+        });
+
+        jEncodeTextField.setText("UTF-8");
+        jEncodeTextField.setToolTipText("你可以自定义编码类型哦");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -153,8 +199,14 @@ public class MainJFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 473, Short.MAX_VALUE)
+                        .addComponent(jRenameButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jnextButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jCheckBoxMd5)
                         .addGap(18, 18, 18)
@@ -163,28 +215,38 @@ public class MainJFrame extends javax.swing.JFrame {
                         .addComponent(jCheckBoxSha256)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jCrc32CheckBox1)
-                        .addGap(0, 395, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jRenameButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jnextButton1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jEncodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBoxMd5)
-                    .addComponent(jCheckBoxSha1)
-                    .addComponent(jCheckBoxSha256)
-                    .addComponent(jCrc32CheckBox1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jCheckBoxMd5)
+                        .addComponent(jCheckBoxSha1)
+                        .addComponent(jCheckBoxSha256)
+                        .addComponent(jCrc32CheckBox1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jEncodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jnextButton1)
                     .addComponent(jRenameButton1))
@@ -204,6 +266,81 @@ public class MainJFrame extends javax.swing.JFrame {
         new RenameJFrame().setVisible(true);
     }//GEN-LAST:event_jRenameButton1ActionPerformed
 
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        handleText();
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jTextArea3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextArea3MouseClicked
+        handleText();
+    }//GEN-LAST:event_jTextArea3MouseClicked
+
+    String encoding = "UTF-8";
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+        int sel = jComboBox2.getSelectedIndex();
+        jEncodeTextField.setText(ENCODINGS[sel]);
+        handleText();
+    }//GEN-LAST:event_jComboBox2ActionPerformed
+
+    private void handleText(){
+        String text = jTextArea2.getText();
+        String coding = jEncodeTextField.getText();
+        if(coding.equals("")){
+            JOptionPane.showMessageDialog(rootPane, "请指定一种编码");
+            jEncodeTextField.setText(ENCODINGS[0]);
+            return;
+        }
+        if(!"".equals(text)){
+            int selectedIndex = jComboBox1.getSelectedIndex();
+            if(selectedIndex == 0){
+                try {
+                    String base64 = Base64.byteArrayToBase64(text.getBytes(coding));
+                    String plaintext = new String(Base64.base64ToByteArray(base64),coding);
+                    if(!text.equals(plaintext)){
+                        jTextArea3.setText("输入的一些符号不在" + coding + "编码字符集中");
+                    }else{
+                        jTextArea3.setText(base64);
+                    }
+                } catch (UnsupportedEncodingException ex) {
+                    jTextArea3.setText("不支持这个编码:" + coding);
+                } catch (Exception e){
+                    jTextArea3.setText(e.getLocalizedMessage());
+                }
+            }else if(selectedIndex == 1){
+                try {
+                    String plaintext = new String(Base64.base64ToByteArray(text),coding);
+                    jTextArea3.setText(plaintext);
+                } catch (UnsupportedEncodingException ex) {
+                    jTextArea3.setText("不支持这个编码:" + coding);
+                } catch (Exception e){
+                    jTextArea3.setText(e.getLocalizedMessage());
+                }
+            }else if(selectedIndex == 2){
+                try {
+                    String hexStr = HexUtil.byte2HexStr(text.getBytes(coding));
+                    String plaintext = new String(HexUtil.hexStr2Bytes(hexStr),coding);
+                    if(!text.equals(plaintext)){
+                        jTextArea3.setText("输入的一些符号不在" + coding + "编码字符集中");
+                    }else{
+                        jTextArea3.setText(hexStr);
+                    }
+                } catch (UnsupportedEncodingException ex) {
+                    jTextArea3.setText("不支持这个编码:" + coding);
+                } catch (Exception e){
+                    jTextArea3.setText(e.getLocalizedMessage());
+                }
+            }else if(selectedIndex == 3){
+                try {
+                    String plaintext = new String(HexUtil.hexStr2Bytes(text),coding);
+                    jTextArea3.setText(plaintext);
+                } catch (UnsupportedEncodingException ex) {
+                    jTextArea3.setText("不支持这个编码:" + coding);
+                } catch (Exception e){
+                    jTextArea3.setText(e.getLocalizedMessage());
+                }
+            }
+        }
+        
+    }
     /**
      * @param args the command line arguments
      */
@@ -242,11 +379,18 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBoxMd5;
     private javax.swing.JCheckBox jCheckBoxSha1;
     private javax.swing.JCheckBox jCheckBoxSha256;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JCheckBox jCrc32CheckBox1;
+    private javax.swing.JTextField jEncodeTextField;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JButton jRenameButton1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea jTextArea3;
     private javax.swing.JButton jnextButton1;
     // End of variables declaration//GEN-END:variables
 }
