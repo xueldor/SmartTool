@@ -124,7 +124,7 @@ public class EncryptJFrame extends javax.swing.JFrame {
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setSelected(true);
-        jRadioButton1.setText("AES(内置key)");
+        jRadioButton1.setText("AES(小文件)");
         jRadioButton1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jRadioButton1ItemStateChanged(evt);
@@ -278,6 +278,7 @@ public class EncryptJFrame extends javax.swing.JFrame {
                         try {
                             byte[] content = AesUtilForCryptoJS.getFileContent(file);
                             String text = AesUtilForCryptoJS.encrypt(new String(content, StandardCharsets.ISO_8859_1), pwd);
+                            System.out.println("text");
                             status = AesUtilForCryptoJS.writeContent(file, text, true);
                             if (status == 1) {
                                 JOptionPane.showMessageDialog(rootPane, file + "已存在");

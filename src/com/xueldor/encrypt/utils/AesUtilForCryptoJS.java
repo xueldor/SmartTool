@@ -28,10 +28,10 @@ public class AesUtilForCryptoJS {
 
     public static String encrypt(String origin, String secret) {
         try {
-            byte[] input = origin.getBytes();
+            byte[] input = origin.getBytes(StandardCharsets.ISO_8859_1);
             // 以下两个变量不可修改，否则java加密的，js无法解密
-            byte[] saltData = "DFބf$t:".getBytes();
-            byte[] preData = "Salted__".getBytes();
+            byte[] saltData = "DFބf$t:".getBytes(StandardCharsets.UTF_8);
+            byte[] preData = "Salted__".getBytes(StandardCharsets.UTF_8);
             MessageDigest md5 = MessageDigest.getInstance("MD5");
             final byte[][] keyAndIV = generateKeyAndIV(32, 16, 1, saltData, secret.getBytes(StandardCharsets.UTF_8), md5);
             SecretKeySpec key = new SecretKeySpec(keyAndIV[0], "AES");
@@ -44,7 +44,7 @@ public class AesUtilForCryptoJS {
             byte[] encryptedData = addBytes(saltData, encrypt);
             return Base64.byteArrayToBase64(addBytes(preData, encryptedData));
         } catch (Exception e) {
-            //log.error("aesDecrypt error.param={}", encryptedText, e);
+            e.printStackTrace();
             return null;
         }
     }

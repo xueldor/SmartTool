@@ -139,7 +139,7 @@
           <ComponentRef name="buttonGroup1"/>
         </Property>
         <Property name="selected" type="boolean" value="true"/>
-        <Property name="text" type="java.lang.String" value="AES(&#x5185;&#x7f6e;key)"/>
+        <Property name="text" type="java.lang.String" value="AES(&#x5c0f;&#x6587;&#x4ef6;)"/>
       </Properties>
       <Events>
         <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jRadioButton1ItemStateChanged"/>
