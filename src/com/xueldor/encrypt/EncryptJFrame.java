@@ -3,25 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.xueldor.encrypt;
 
 import com.xueldor.encrypt.controller.CustromEncryt;
+import com.xueldor.encrypt.utils.AesUtilForCryptoJS;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
 
 /**
  *
  * @author xuexiangyu
  */
 public class EncryptJFrame extends javax.swing.JFrame {
+
     private CustromEncryt custromEncryt;
     private File rememberLastDirFile;
 
@@ -31,15 +34,15 @@ public class EncryptJFrame extends javax.swing.JFrame {
     public EncryptJFrame() {
         initComponents();
         custromEncryt = new CustromEncryt(this);
-        jTextArea1.setTransferHandler(new DefaultTextTransferHandler(){
+        jTextArea1.setTransferHandler(new DefaultTextTransferHandler() {
             private static final long serialVersionUID = 1L;
-            
+
             @Override
             public boolean importData(JComponent comp, Transferable t) {
                 System.out.println("importData");
                 try {
                     Object o = t.getTransferData(DataFlavor.javaFileListFlavor);
- 
+
                     String filepath = o.toString();
                     if (filepath.startsWith("[")) {
                         filepath = filepath.substring(1);
@@ -49,12 +52,12 @@ public class EncryptJFrame extends javax.swing.JFrame {
                     }
                     jTextArea1.setText(filepath);
                     return true;
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     jTextArea1.setText(e.getLocalizedMessage());
                 }
                 return false;
             }
+
             @Override
             public boolean canImport(JComponent comp, DataFlavor[] flavors) {
                 for (int i = 0; i < flavors.length; i++) {
@@ -76,12 +79,16 @@ public class EncryptJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jrunButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         outDirLabel1 = new javax.swing.JLabel();
         outDirPathTextField1 = new javax.swing.JTextField();
         notButton1 = new javax.swing.JButton();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -115,6 +122,20 @@ public class EncryptJFrame extends javax.swing.JFrame {
             }
         });
 
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setSelected(true);
+        jRadioButton1.setText("AES(内置key)");
+        jRadioButton1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jRadioButton1ItemStateChanged(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setText("取反");
+
+        jTextField1.setToolTipText("再次输入AES密钥");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,16 +143,23 @@ public class EncryptJFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jrunButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(notButton1)
-                        .addGap(0, 485, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(outDirLabel1)
                         .addGap(18, 18, 18)
-                        .addComponent(outDirPathTextField1)))
+                        .addComponent(outDirPathTextField1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jrunButton1)
+                                    .addComponent(jRadioButton1))
+                                .addGap(46, 46, 46)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jRadioButton2)
+                                    .addComponent(notButton1))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -143,11 +171,17 @@ public class EncryptJFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(outDirLabel1)
                     .addComponent(outDirPathTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButton1)
+                    .addComponent(jRadioButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jrunButton1)
                     .addComponent(notButton1))
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -156,55 +190,55 @@ public class EncryptJFrame extends javax.swing.JFrame {
     private void outDirPathTextField1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_outDirPathTextField1MouseClicked
         JFileChooser jFileChooser = new JFileChooser();
         jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        if(rememberLastDirFile == null){
+        if (rememberLastDirFile == null) {
             //默认打开在我的电脑视图
             jFileChooser.setCurrentDirectory(jFileChooser.getFileSystemView().getParentDirectory(new File("C:\\")));
-        }else{
+        } else {
             jFileChooser.setCurrentDirectory(rememberLastDirFile);
         }
         //        jFileChooser.showSaveDialog(this);
         jFileChooser.showOpenDialog(this);
-        File file=jFileChooser.getSelectedFile();
-        if(file != null && file.isDirectory()){
+        File file = jFileChooser.getSelectedFile();
+        if (file != null && file.isDirectory()) {
             rememberLastDirFile = file;
-            System.out.println("文件夹:"+file.getAbsolutePath());
+            System.out.println("文件夹:" + file.getAbsolutePath());
             outDirPathTextField1.setText(file.getAbsolutePath());
         }
     }//GEN-LAST:event_outDirPathTextField1MouseClicked
 
     private void jrunButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrunButton1ActionPerformed
         String out = outDirPathTextField1.getText();
-        if("".equals(out)){
+        if ("".equals(out)) {
             JOptionPane.showMessageDialog(rootPane, "选择一个目录作为输出目录");
             return;
         }
         File file = new File(out);
-        if(!file.exists() || !file.isDirectory()){
+        if (!file.exists() || !file.isDirectory()) {
             JOptionPane.showMessageDialog(rootPane, "目标目录不存在或者不是文件夹");
             return;
         }
         String[] list = file.list();
-        if(list != null && list.length > 0){
+        if (list != null && list.length > 0) {
             JOptionPane.showMessageDialog(rootPane, "目标目录不是空文件夹");
             return;
         }
         String paths = jTextArea1.getText();
-        if(paths == null || (paths = paths.trim()).length() == 0){
+        if (paths == null || (paths = paths.trim()).length() == 0) {
             JOptionPane.showMessageDialog(rootPane, "请将文件拖到文本区域");
             return;
         }
         String[] split = paths.split(",");
-        for(int i = 0;i < split.length;i++){
+        for (int i = 0; i < split.length; i++) {
             split[i] = split[i].trim();
         }
         for (String s : split) {
-            if(out.contains(s)){
+            if (out.contains(s)) {
                 JOptionPane.showMessageDialog(rootPane, "源路径不能包含目标路径");
                 return;
             }
         }
-        custromEncryt.setFiles(split,out);
-        
+        custromEncryt.setFiles(split, out);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -218,35 +252,79 @@ public class EncryptJFrame extends javax.swing.JFrame {
                 jrunButton1.setEnabled(true);
             }
         }).start();
-        
+
         jrunButton1.setEnabled(false);
     }//GEN-LAST:event_jrunButton1ActionPerformed
 
     private void notButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notButton1ActionPerformed
         String paths = jTextArea1.getText();
-        if(paths == null || (paths = paths.trim()).length() == 0){
+        if (paths == null || (paths = paths.trim()).length() == 0) {
             JOptionPane.showMessageDialog(rootPane, "请将文件拖到文本区域");
             return;
         }
         String[] split = paths.split(",");
         custromEncryt.setFiles(split);
-        
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    custromEncryt.doComplOriginFile();
-                    JOptionPane.showMessageDialog(rootPane, "Finish");
-                } catch (IOException ex) {
-                    Logger.getLogger(EncryptJFrame.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(rootPane, "出错了！");
-                }
-                notButton1.setEnabled(true);
+        if (jRadioButton1.isSelected()) {
+            String pwd = jTextField1.getText().trim();
+            if (pwd.length() == 0) {
+                JOptionPane.showMessageDialog(rootPane, "请输入密码");
+                return;
             }
-        }).start();
-        
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    int status = 0;
+                    for (String file : split) {
+                        try {
+                            byte[] content = AesUtilForCryptoJS.getFileContent(file);
+                            String text = AesUtilForCryptoJS.encrypt(new String(content, StandardCharsets.ISO_8859_1), pwd);
+                            status = AesUtilForCryptoJS.writeContent(file, text, true);
+                            if (status == 1) {
+                                JOptionPane.showMessageDialog(rootPane, file + "已存在");
+                            } else if (status == 2) {
+                                JOptionPane.showMessageDialog(rootPane, file + " 出错了");
+                            }
+                        } catch (Exception ex) {
+                            status = 2;
+                            Logger.getLogger(EncryptJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                            JOptionPane.showMessageDialog(rootPane, file + " 出错了");
+                        }
+                    }
+                    if (status == 0) {
+                        JOptionPane.showMessageDialog(rootPane, " finish");
+                    }
+                    notButton1.setEnabled(true);
+                }
+            }).start();
+
+        } else if (jRadioButton2.isSelected()) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        custromEncryt.doComplOriginFile();
+                        JOptionPane.showMessageDialog(rootPane, "Finish");
+                    } catch (IOException ex) {
+                        Logger.getLogger(EncryptJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(rootPane, "出错了！");
+                    }
+                    notButton1.setEnabled(true);
+                }
+            }).start();
+        }
+
         notButton1.setEnabled(false);
     }//GEN-LAST:event_notButton1ActionPerformed
+
+    private void jRadioButton1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton1ItemStateChanged
+        if (evt.getStateChange() == 1 && evt.getSource() == jRadioButton1) {
+            jTextField1.setVisible(true);
+            jrunButton1.setEnabled(false);
+        } else {
+            jTextField1.setVisible(false);
+            jrunButton1.setEnabled(true);
+        }
+    }//GEN-LAST:event_jRadioButton1ItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -284,8 +362,12 @@ public class EncryptJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JButton jrunButton1;
     private javax.swing.JButton notButton1;
     private javax.swing.JLabel outDirLabel1;
